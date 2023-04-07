@@ -19,6 +19,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use('/api/users', require('./routes/userRoutes.js'))
 app.use('/api/vet',vetRoutes)                                                                                                  
 app.use('/api/booking/', require('./routes/bookingRoutes.js'))
+app.use('/api/counter', require('./routes/counterRoutes'))
 
 app.use(errorHandler)
 

@@ -7,7 +7,7 @@ const moment = require('moment');
 const QRCode = require('qrcode');
 
 const registerPet = ((req, res) => {
-  if(validateRegReqBody(req, res)) {
+  
     const date = moment(req.body.date).startOf('day').format('YYYY-MM-DD');
     // Destructure the request body
     const { petName, petId, species, breed, gender, age, size, color, petStatus } = req.body;
@@ -47,7 +47,7 @@ const registerPet = ((req, res) => {
           res.status(500).json({ error: 'Failed to add profile' });
         });
     });
-  }
+  
 });
 
 
