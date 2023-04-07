@@ -41,11 +41,11 @@ console.log(req.body)
 
     //--------------------update Report-----------------------
     const reportUpdate = async (req, res) => {
-      const { id } = req.params;
-      const { petId, currentHealthStatus, vaccinations } = req.body;
-      console.log("add vac called")
+     
+      const { pid, currentHealthStatus, vaccinations,index } = req.body;
+     // console.log(currentHealthStatus)
 
-      console.log(req.body)
+     // console.log(req.body)
     
       // Validate the request body
       // const { error } = validateReport(req.body);
@@ -53,17 +53,27 @@ console.log(req.body)
     
       try {
         // Ensure the report belongs to the petId
-        const reportData = await report.findOne({ petId: id });
+        const reportData = await report.findOne({ petId: pid });
+        console.log(reportData)
         if (!reportData) return res.status(404).json({ error: 'Report not found' });
-    
+    console.log(vaccinations[index].name)
         // Update the report
         await report.updateOne(
-          { petId: id },
           {
-            $set: { currentHealthStatus: currentHealthStatus },
-            $push: { vaccinations: { $each: vaccinations } }
+            petId: pid,
+            "vaccinations._id": vaccinations[index]._id
+          },
+          {
+            $set: { 
+              "vaccinations.$.name": vaccinations[index].name,
+              "vaccinations.$.dateGiven": vaccinations[index].dateGiven,
+              "vaccinations.$.expirationDate": vaccinations[index].expirationDate,
+              currentHealthStatus: currentHealthStatus
+            }
           }
         );
+        
+        
     
         // Return success response
         res.status(200).json({ message: 'Report updated' });
