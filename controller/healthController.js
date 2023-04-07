@@ -56,7 +56,6 @@ console.log(req.body)
         const reportData = await report.findOne({ petId: pid });
         console.log(reportData)
         if (!reportData) return res.status(404).json({ error: 'Report not found' });
-    console.log(vaccinations[index].name)
         // Update the report
         await report.updateOne(
           {
@@ -141,4 +140,76 @@ const getallReport=(async (req,res) => {
   }
 });
 
-    module.exports = {addReport,reportUpdate,getReport,deleteReport,getallReport}
+//--------------------Add new Vac-----------------------
+const addVac = async (req, res) => {
+  const { id } = req.params;
+  const { petId, currentHealthStatus, vaccinations } = req.body;
+  console.log("add vac called")
+
+  console.log(req.body)
+
+  // Validate the request body
+  // const { error } = validateReport(req.body);
+  // if (error) return res.status(400).json({ error: error.details[0].message });
+
+  try {
+    // Ensure the report belongs to the petId
+    const reportData = await report.findOne({ petId: id });
+    if (!reportData) return res.status(404).json({ error: 'Report not found' });
+
+    // Update the report
+    await report.updateOne(
+      { petId: id },
+      {
+        $set: { currentHealthStatus: currentHealthStatus },
+        $push: { vaccinations: { $each: vaccinations } }
+      }
+    );
+
+    // Return success response
+    res.status(200).json({ message: 'Report updated' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+//--------------------Delete exsisting Vac-----------------------
+
+const deleteVac = async (req, res) => {
+     
+  const { id, index } = req.params;
+    
+  try {
+    // Ensure the report belongs to the petId
+    const reportData = await report.findOne({ petId: id });
+
+    if (!reportData) return res.status(404).json({ error: 'Report not found' });
+
+    // Remove the specified element from the vaccinations array
+    const removedVaccination = reportData.vaccinations.splice(index, 1)[0];
+
+    // Update the report
+    await report.updateOne(
+      {
+        petId: id
+      },
+      {
+        $pull: {
+          vaccinations: { _id: removedVaccination._id }
+        }
+      }
+    );
+
+    // Return success response
+    res.status(200).json({ message: 'Vaccination Deleted' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+
+    module.exports = {addReport,reportUpdate,getReport,deleteReport,getallReport,addVac,deleteVac}
