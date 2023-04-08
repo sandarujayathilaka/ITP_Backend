@@ -141,6 +141,9 @@ const getallprofile=(async (req,res) => {
   }
 });
 
+
+//search 
+
 const searchprofile = ( async (req, res) => {
   try {
     const query = req.query.petId;
@@ -150,6 +153,8 @@ const searchprofile = ( async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+//QR fetching
 
 const Qr =(async (req, res) => {
 

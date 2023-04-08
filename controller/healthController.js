@@ -5,16 +5,22 @@ const{validateReport}=require('../validations/vetValidation')
 
 
 const addReport = (async (req, res) => {
+
 console.log(req.body)
   // Validate the request body
   const { error } = validateReport(req.body);
   if (error)
   return res.status(400).json({ error: error.details[0].message });
 
-  // Check if the petId exists in the pet collection
+  // Validate the petId exists in the pet and health collection
   const petProfile = await pet.findOne({ petId: req.body.petId });
+  const reportOne = await report.findOne({ petId: req.body.petId });
   if (!petProfile) 
   return res.status(400).json({ error: 'Invalid petId' });
+
+  if (reportOne) 
+  return res.status(400).json({ error: 'Already Exsists' });
+
 
   // Create a new health report
   const newReport = new report({
