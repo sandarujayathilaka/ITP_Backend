@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const {registerPet,profileUpdate, getProfile,deleteProfile,getallprofile,searchprofile, Qr} = require('../controller/petProfileController')
-const { addReport,reportUpdate,getReport,deleteReport,getallReport, addVac, deleteVac } = require('../controller/healthController')
+const { addReport,reportUpdate,getReport,deleteReport,getallReport, addVac, deleteVac, statusCount } = require('../controller/healthController')
 
 router.post('/addpet',registerPet)
 router.put('/updateprofile/:id',profileUpdate)
@@ -17,5 +17,6 @@ router.get('/getreport/:id',getReport)
 router.delete('/deletereport/:id',deleteReport)
 router.get('/getallreport',getallReport)
 router.get('/pets/qrcode/:id',Qr)
+router.get('/statuscount',statusCount)
 
 module.exports = router

@@ -216,6 +216,20 @@ const deleteVac = async (req, res) => {
   }
 };
 
+//-------------healthstatus count-----------------
+
+const statusCount = async (req, res) => {
+  try {
+    const normalCount = await report.countDocuments({ currentHealthStatus: 'Normal' });
+    const criticalCount = await report.countDocuments({ currentHealthStatus: 'Critical' });
+    res.json({ normalCount, criticalCount });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Error getting pet counts' });
+  }
+}
 
 
-    module.exports = {addReport,reportUpdate,getReport,deleteReport,getallReport,addVac,deleteVac}
+
+
+    module.exports = {addReport,reportUpdate,getReport,deleteReport,getallReport,addVac,deleteVac,statusCount}

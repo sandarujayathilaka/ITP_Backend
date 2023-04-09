@@ -174,4 +174,6 @@ const Qr =(async (req, res) => {
 });
 
 
+
+
 module.exports = { registerPet,profileUpdate,getProfile,deleteProfile,getallprofile,searchprofile,Qr}
