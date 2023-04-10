@@ -25,7 +25,7 @@ const registerPet = ((req, res) => {
       petStatus,
     });
     // Generate QR code
-    QRCode.toDataURL(JSON.stringify(newpet), function (err, url) {
+    QRCode.toDataURL(`Pet Name: ${petName}\nPet ID: ${petId}\nSpecies: ${species}\nBreed: ${breed}\nGender: ${gender}\nStatus: ${petStatus} \n More Details Pls contact Animal Manager of the shelter.\n ---- Thank you 😊----`, function (err, url) {
       if (err) {
         console.error(err);
         // Respond with an error message
