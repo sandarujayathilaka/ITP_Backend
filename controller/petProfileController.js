@@ -1,6 +1,7 @@
 const express = require('express');
 const Joi = require('joi');
 const pet = require('../models/petModel');
+const booking = require('../models/bookingModel');
 const{validateRegReqBody}=require('../validations/vetValidation');
 const mongoose = require('mongoose');
 const moment = require('moment');
@@ -173,7 +174,21 @@ const Qr =(async (req, res) => {
   }
 });
 
+//-------------Shelter pets-----------------
+
+const shelterpets=(async (req,res) => {
+  try {
+      // get all the profile
+      const books= await booking.find();
+      // return the profile
+      res.status(200).json({ books });
+  } catch (err) {
+      console.log(err);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 
 
-module.exports = { registerPet,profileUpdate,getProfile,deleteProfile,getallprofile,searchprofile,Qr}
+
+module.exports = { registerPet,profileUpdate,getProfile,deleteProfile,getallprofile,searchprofile,Qr,shelterpets}

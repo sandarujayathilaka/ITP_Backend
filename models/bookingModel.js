@@ -1,46 +1,65 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
-const bookingSchema = mongoose.Schema(
-  {
-    cus_id: {
-        type: String,
-        required: [true, 'Please add a cus_id'],
-        default: 'temp cus_id',
-    },
-    description: {
-        type: String,
-        required: [true, 'Please add a description'],
-    },
-    start_time: {
-        type: String,
-        required: [true, 'Please add an start_time'],
-        unique: true,
-    },
-    end_time: {
-        type: String,
-        required: [false, 'Please add a end_time'],
-    },
-    status: {
-      type: String,
-      enum: ['BOOKED', 'CANCLED', 'PAID' , 'FINISHED'],
-      default: 'BOOKED',
-      required: [true, 'Please add a status'],
-    },
-    pets: {
-      type: [
-        {
-          pets_id: {
-            type: String,
-            required: [true, 'Please add a pet_id'],
-          },
-        }
-      ],
-      required: [false],
-    },
+const miniSchema = new mongoose.Schema({
+  pid: {
+    type: Number,
+    unique: true,
+    required: false,
   },
-  {
-    timestamps: true,
-  }
-)
+  name: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  type: {
+    type: String,
+    enum: ["cat", "dog", "other"],
+    required: true,
+  },
+});
 
-module.exports = mongoose.model('Booking', bookingSchema)
+
+const bookingSchema = new mongoose.Schema({
+  cus_id: {
+    type: String,
+    required: [true, "Please add a cus_id"],
+    default: "temp cus_id",
+  },
+  contactNumbers: {
+    type: [String],
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  startDate: {
+    type: Date,
+    required: false,
+  },
+  endDate: {
+    type: Date,
+    required: false,
+  },
+  petCount: {
+    type: Number,
+    required: true,
+  },
+  mini: {
+    type: [miniSchema],
+    required: true,
+  },
+  status: {
+    type: String,
+    enum: ['BOOKED', 'CANCLED', 'PAID' , 'FINISHED'],
+    default: 'BOOKED',
+    required: [true, 'Please add a status'],
+  },
+});
+
+const FormData = mongoose.model("Booking", bookingSchema);
+
+module.exports = FormData;
