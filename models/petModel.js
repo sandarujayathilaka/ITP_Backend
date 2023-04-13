@@ -49,7 +49,9 @@ const petSchema = mongoose.Schema(
         required: [true, 'Please add a status'],
     },
 
-    qrCode: { type: String, required: true }
+    qrCode: { type: String, required: true },
+
+    image:{ type:String,required:true}
 
   }
 )

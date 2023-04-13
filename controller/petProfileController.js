@@ -11,7 +11,7 @@ const registerPet = ((req, res) => {
   
     const date = moment(req.body.date).startOf('day').format('YYYY-MM-DD');
     // Destructure the request body
-    const { petName, petId, species, breed, gender, age, size, color, petStatus } = req.body;
+    const { petName, petId, species, breed, gender, age, size, color, petStatus,image } = req.body;
     // Create a new profile
     const newpet = new pet({
       petName,
@@ -24,6 +24,7 @@ const registerPet = ((req, res) => {
       color,
       date,
       petStatus,
+      image
     });
     // Generate QR code
     QRCode.toDataURL(`Pet Name: ${petName}\nPet ID: ${petId}\nSpecies: ${species}\nBreed: ${breed}\nGender: ${gender}\nStatus: ${petStatus} \n More Details Pls contact Animal Manager of the shelter.\n ---- Thank you 😊----`, function (err, url) {
@@ -57,11 +58,11 @@ const registerPet = ((req, res) => {
 const profileUpdate = (async(req,res)=>{
 console.log("hi")
   const {id} = req.params;
-  const { petName,species,breed,gender,age,date,size,color,petStatus} = req.body;
-  const updatedProfileData = { petName,species,breed,gender,age,date,size,color,petStatus};
+  const { petName,species,breed,gender,age,date,size,color,petStatus,image} = req.body;
+  const updatedProfileData = { petName,species,breed,gender,age,date,size,color,petStatus,image};
 
   // Validate the request body
-  if (!petName || !species || !breed || !gender || !age ||!date || !size || !color || !petStatus) {
+  if (!petName || !species || !breed || !gender || !age ||!date || !size || !color || !petStatus || !image) {
       return res.status(400).send({ error: 'Missing required fields' });
   }
 
