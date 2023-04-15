@@ -54,7 +54,7 @@ const bookingSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['BOOKED', 'CANCLED', 'PAID' , 'FINISHED'],
+    enum: ['BOOKED', 'CANCLED', 'PAID' , 'FINISHED','CLOSED'],
     default: 'BOOKED',
     required: [true, 'Please add a status'],
   },

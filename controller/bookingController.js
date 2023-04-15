@@ -26,15 +26,16 @@ const readBooking = asyncHandler(async (req, res) =>{
 const updateBooking = asyncHandler(async (req, res) =>{
 
     const id = req.params.id
-    const { description , start_time , end_time } = req.body
+    const { description , startDate , endDate , status } = req.body
 
     const booking = await Booking.findByIdAndUpdate(id, {
         description,
-        start_time,
-        end_time
+        startDate,
+        endDate,
+        status
     })
 
-    booking ? res.status(201).json(booking) : res.status(400).json({message: 'Booking not updated'})
+    booking ? res.status(201).json(booking) : res.status(400).json({message: 'Booking not updated'})
 })
 
 

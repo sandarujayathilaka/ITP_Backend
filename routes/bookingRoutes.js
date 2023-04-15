@@ -8,10 +8,10 @@ const {
 } = require('../controller/bookingController')
 const { protect , userProtect , adminProtect} = require('../middleware/authMiddleware')
 
-router.post('/', protect , addBooking)
-router.get('/', protect , readBooking )
-router.put('/:id', protect , updateBooking)
-router.delete('/:id', protect , deleteBooking )
+router.post('/', addBooking)
+router.get('/', readBooking )
+router.put('/:id', updateBooking)
+router.delete('/:id', deleteBooking )
 
 
 module.exports = router

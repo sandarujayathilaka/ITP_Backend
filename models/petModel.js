@@ -29,7 +29,7 @@ const petSchema = mongoose.Schema(
         required: [true, 'Please add a Age'],
 
     },
-    size:{
+    weight:{
         type:String,
         required: [true, 'Please add a size'],
     },
@@ -51,7 +51,12 @@ const petSchema = mongoose.Schema(
 
     qrCode: { type: String, required: true },
 
-    image:{ type:String,required:true}
+    image:{ type:String,required:true},
+
+    price:{
+        type:String,
+        required: [true, 'Please add a price'],
+    }
 
   }
 )
