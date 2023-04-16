@@ -12,11 +12,11 @@ const petSchema = mongoose.Schema(
     },
     species: {
         type: String,
-        required: [true, 'Please add an email'],
+        required: [true, 'Please add an species'],
     },
     breed: {
         type: String,
-        required: [true, 'Please add a password'],
+        required: [true, 'Please add a breed'],
     },
   
     gender:{
@@ -31,7 +31,7 @@ const petSchema = mongoose.Schema(
     },
     weight:{
         type:String,
-        required: [true, 'Please add a size'],
+        required: [true, 'Please add a weight'],
     },
 
     color:{
@@ -56,6 +56,13 @@ const petSchema = mongoose.Schema(
     price:{
         type:String,
         required: [true, 'Please add a price'],
+    },
+
+    systime:{
+
+        type:String,
+        required: [true, 'sys time'],
+
     }
 
   }

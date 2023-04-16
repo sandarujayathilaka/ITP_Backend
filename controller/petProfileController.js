@@ -12,7 +12,28 @@ const registerPet = ((req, res) => {
   
     const date = moment(req.body.date).startOf('day').format('YYYY-MM-DD');
     // Destructure the request body
-    const { petName, petId, species, breed, gender, age,  weight, color, petStatus,image,price } = req.body;
+
+   const { petName, pId, species, breed, gender, age,  weight, color, petStatus,image,price } = req.body;
+   
+    const systime = new Date().toLocaleString("en-US", { timeZone: "Asia/Colombo" })
+
+    let petId;
+
+    //Validate and create unique ID
+
+    if(species=="Cat" && gender=="Male"){
+      petId = "CM" + pId;
+    } else if(species=="Cat" && gender=="Female"){
+      petId  ="CF" + pId;
+    } else if(species=="Dog" && gender=="Male"){
+      petId= "DM" + pId;
+    } else if(species=="Dog" && gender=="Female"){
+      petId = "DF" + pId;
+    } else {
+      console.log("Please recheck the given Value.PID can not set.");
+    }
+
+
     // Create a new profile
     const newpet = new pet({
       petName,
@@ -26,7 +47,8 @@ const registerPet = ((req, res) => {
       date,
       petStatus,
       image,
-      price
+      price,
+      systime
     });
     // Generate QR code
     QRCode.toDataURL(`Pet Name: ${petName}\nPet ID: ${petId}\nSpecies: ${species}\nBreed: ${breed}\nGender: ${gender}\nStatus: ${petStatus} \n More Details Pls contact Animal Manager of the shelter.\n ---- Thank you 😊----`, function (err, url) {
@@ -61,7 +83,8 @@ const profileUpdate = (async(req,res)=>{
 console.log("hi")
   const {id} = req.params;
   const { petName,species,breed,gender,age,date,weight,color,petStatus,image,price} = req.body;
-  const updatedProfileData = { petName,species,breed,gender,age,date,weight,color,petStatus,image,price};
+  const systime = new Date().toLocaleString("en-US", { timeZone: "Asia/Colombo" })
+  const updatedProfileData = { petName,species,breed,gender,age,date,weight,color,petStatus,image,price,systime};
 
   // Validate the request body
   if (!petName || !species || !breed || !gender || !age ||!date || !weight || !color || !petStatus || !image || !price) {
@@ -327,5 +350,44 @@ const petstatusCount = async (req, res) => {
   }
 }
 
+//get last five breed
 
-module.exports = { registerPet,profileUpdate,getProfile,deleteProfile,getallprofile,searchprofile,Qr,shelterpets,addbreed,getallbreeds,breedUpdate,deletebreed,petstatusCount}
+
+const lastFive = async (req, res) => {
+  try {
+    const totalBreedsCount = await breed.countDocuments();
+    const limit = Math.min(totalBreedsCount, 5); // Limit to 5 or totalBreedsCount, whichever is smaller
+    const breeds = await breed.find().sort({ createdAt: -1 }).skip(totalBreedsCount - limit);
+    res.json(breeds);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+}
+
+
+
+
+//get last five added pets
+
+
+const lastpetprofile = async (req, res) => {
+  try {
+    const totalCount = await pet.countDocuments();
+    const limit = Math.min(totalCount, 5);
+    const petProfiles = await pet.find().sort({ createdAt: -1 }).skip(totalCount- limit);
+    res.json(petProfiles);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+}
+
+
+
+
+
+
+
+
+module.exports = { registerPet,profileUpdate,getProfile,deleteProfile,getallprofile,searchprofile,Qr,shelterpets,addbreed,getallbreeds,breedUpdate,deletebreed,petstatusCount,lastFive,lastpetprofile}
