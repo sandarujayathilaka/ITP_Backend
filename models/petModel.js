@@ -24,7 +24,7 @@ const petSchema = mongoose.Schema(
         required: [true, 'Please add a gender'],
 
     },
-    age:{
+    birth:{
         type:String,
         required: [true, 'Please add a Age'],
 
@@ -40,7 +40,7 @@ const petSchema = mongoose.Schema(
     },
      
     date:{
-        type:Date,
+        type:String,
         required: [true, 'Please add check in date'],
     },
 
