@@ -15,10 +15,13 @@ const addReport = (async (req, res) => {
     return res.status(400).json({ error: 'Already Exsists' });
 
 
+  console.log(req.body.petId)
+
   // Create a new health report
   const newReport = new report({
     petId: req.body.petId,
     currentHealthStatus: req.body.currentHealthStatus,
+    description:req.body.description,
     vaccinations: req.body.vaccinations
 
   });
@@ -43,7 +46,7 @@ const addReport = (async (req, res) => {
 
 const reportUpdate = async (req, res) => {
 
-  const { pid, currentHealthStatus, vaccinations, index } = req.body;
+  const { pid, currentHealthStatus,vaccinations, index } = req.body;
 
   try {
     // Ensure the report belongs to the petId
@@ -141,7 +144,7 @@ const getallReport = (async (req, res) => {
 
 const addVac = async (req, res) => {
   const { id } = req.params;
-  const { petId, currentHealthStatus, vaccinations } = req.body;
+  const { petId, currentHealthStatus,description, vaccinations } = req.body;
 
   try {
     // Ensure the report belongs to the petId
@@ -153,6 +156,7 @@ const addVac = async (req, res) => {
       { petId: id },
       {
         $set: { currentHealthStatus: currentHealthStatus },
+        $set: { description: description },
         $push: { vaccinations: { $each: vaccinations } }
       }
     );

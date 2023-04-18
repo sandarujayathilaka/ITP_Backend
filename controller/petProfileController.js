@@ -12,6 +12,28 @@ const registerPet = ((req, res) => {
     const date = moment(req.body.date).startOf('day').format('YYYY-MM-DD');
 
    const { petName, pId, species, breed, gender, birth,  weight, color, petStatus,image,price } = req.body;
+
+
+//    if (!image) {
+//     return res.status(400).send({ error: 'Image is too large' });
+//   }
+
+//   if (!species) {
+//   return res.status(400).send({ error: 'Select Species' });
+//   }
+
+//   if (!breed) {
+//     return res.status(400).send({ error: 'Select Breed' });
+// }
+
+// if (!gender) {
+//   console.log("not")
+//   return res.status(400).send({ error: 'Select Gender' });
+// }
+
+// if (!petStatus) {
+//   return res.status(400).send({ error: 'Select petStatus' });
+// }
    
     const systime = new Date().toLocaleString("en-US", { timeZone: "Asia/Colombo" })
 
