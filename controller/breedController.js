@@ -5,13 +5,11 @@ const breed = require('../models/breedModel');
 
 const addbreed = ((req, res) => {
 
-    console.log("Breed called")
-    
     const { breeds,speciesOne } = req.body;
   
     console.log(breeds)
   
-    // Create a new profile
+    // Create a new breed
     const newbreed = new breed({
       breed:breeds,
       species:speciesOne,
@@ -21,7 +19,7 @@ const addbreed = ((req, res) => {
     
       newbreed.save()
         .then(() => {
-          // Respond with success message and the new pet object
+          
           res.status(201).json({ message: 'Profile added', breed: newbreed });
         })
         .catch((err) => {
@@ -33,13 +31,14 @@ const addbreed = ((req, res) => {
   
   });
 
-  //get all breeds
+
+  //--------get all breeds----------
 
 const getallbreeds=(async (req,res) => {
     try {
-        // get all the profile
+        // get all the breed
         const allbreed= await breed.find();
-        // return the profile
+        // return the all the breed
         res.status(200).json({ allbreed });
     } catch (err) {
         console.log(err);
@@ -47,30 +46,28 @@ const getallbreeds=(async (req,res) => {
     }
   });
 
-  // update pet breed
+
+  //------- update pet breed----------
 
 const breedUpdate = (async(req,res)=>{
 
     const {id} = req.params;
     const { breeds,speciesOne } = req.body;
-    const updatedProfileData = {breed:breeds,species:speciesOne};
-
-    console.log(id)
-    console.log(breeds)
+    const updatedBreedData = {breed:breeds,species:speciesOne};
   
     try {
-        // Ensure the profile belongs to the user making the request
-        const profile = await breed.findOne({ _id: id });
+        // Ensure the breed belongs to the user making the request
+        const petBreed = await breed.findOne({ _id: id });
     
-        if (!profile) {
-            return res.status(404).send({ error: 'Profile not found' });
+        if (!petBreed) {
+            return res.status(404).send({ error: 'Breed not found' });
         }
   
-        // Update the profile
-        await breed.findOneAndUpdate({ _id: id }, updatedProfileData);
+        // Update the breed
+        await breed.findOneAndUpdate({ _id: id }, updatedBreedData);
   
         // Return success response
-        res.status(200).send({ status: 'Profile updated' });
+        res.status(200).send({ status: 'Breed updated' });
     } catch (err) {
         console.log(`error:${err}`);
         res.status(500).send({ error: 'Internal server error' });
@@ -78,20 +75,21 @@ const breedUpdate = (async(req,res)=>{
   });
   
 
-  //delete profile
+  //delete breed
+
 const deletebreed = (async (req, res) => {
 
     const { id } = req.params;
     try {
-        // Check if the profile exists
-        const deletedProfile = await breed.findOne({_id:id});
-        if (!deletedProfile) {
+        // Check if the breed exists
+        const deletedBreed = await breed.findOne({_id:id});
+        if (!deletedBreed) {
             return res.status(404).json({ error: 'profile not found' });
         }
         // Delete the profile
         await breed.findOneAndDelete({_id:id});
   
-        return res.status(200).json({ message: 'profile deleted successfully', deletedProfile });
+        return res.status(200).json({ message: 'profile deleted successfully', deletedBreed });
     } catch (err) {
         return res.status(500).json({ error: 'Internal server error' });
     }

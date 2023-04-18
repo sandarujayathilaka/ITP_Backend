@@ -1,15 +1,9 @@
 const report = require('../models/healthModel');
 const pet = require('../models/petModel');
-const { validateReport } = require('../validations/vetValidation')
+
 
 
 const addReport = (async (req, res) => {
-
-  console.log(req.body)
-  // Validate the request body
-  const { error } = validateReport(req.body);
-  if (error)
-    return res.status(400).json({ error: error.details[0].message });
 
   // Validate the petId exists in the pet and health collection
   const petProfile = await pet.findOne({ petId: req.body.petId });
@@ -32,37 +26,34 @@ const addReport = (async (req, res) => {
   // Save the health report to the database
   newReport.save()
     .then(() => {
-      // Respond with success message
+
       res.status(201).json({ message: 'Report Saved' });
     })
     .catch((err) => {
-      // Log the error
+ 
       console.log(err);
-      // Respond with an error message
-      res.status(500).json({ error: 'Failed to save report due' });
+    
+      res.status(500).json({ error: 'Please Fill All Vaccination Details' });
     })
 });
 
 
 
 //--------------------update Report-----------------------
+
 const reportUpdate = async (req, res) => {
 
   const { pid, currentHealthStatus, vaccinations, index } = req.body;
-  // console.log(currentHealthStatus)
-
-  // console.log(req.body)
-
-  // Validate the request body
-  // const { error } = validateReport(req.body);
-  // if (error) return res.status(400).json({ error: error.details[0].message });
 
   try {
     // Ensure the report belongs to the petId
+
     const reportData = await report.findOne({ petId: pid });
     console.log(reportData)
     if (!reportData) return res.status(404).json({ error: 'Report not found' });
+
     // Update the report
+
     await report.updateOne(
       {
         petId: pid,
@@ -79,8 +70,6 @@ const reportUpdate = async (req, res) => {
     );
 
 
-
-    // Return success response
     res.status(200).json({ message: 'Report updated' });
   } catch (error) {
     console.error(error);
@@ -105,6 +94,7 @@ const getReport = (async (req, res) => {
     });
   }
   // check if profile exists
+
   if (!petReport) {
     return res.status(404).json({
       error: 'Profile not found'
@@ -114,16 +104,17 @@ const getReport = (async (req, res) => {
 })
 
 //-------------------delete report------------------------
+
 const deleteReport = (async (req, res) => {
 
   const { id } = req.params;
   try {
-    // Check if the profile exists
+    // Check if the report exists
     const deletedreport = await report.findOne({ petId: id });
     if (!deletedreport) {
       return res.status(404).json({ error: 'profile not found' });
     }
-    // Delete the profile
+    // Delete the report
     await report.findOneAndDelete({ petId: id });
 
     return res.status(200).json({ message: 'profile deleted successfully', deletedreport });
@@ -132,13 +123,13 @@ const deleteReport = (async (req, res) => {
   }
 });
 
-//-------------------get all profiles---------------------
+//-------------------get all reports---------------------
 
 const getallReport = (async (req, res) => {
   try {
-    // get all the profile 
+    // get all the reports
     const petReport = await report.find();
-    // return the profile
+    // return the report
     res.status(200).json({ petReport });
   } catch (err) {
     console.log(err);
@@ -147,16 +138,10 @@ const getallReport = (async (req, res) => {
 });
 
 //--------------------Add new Vac-----------------------
+
 const addVac = async (req, res) => {
   const { id } = req.params;
   const { petId, currentHealthStatus, vaccinations } = req.body;
-  console.log("add vac called")
-
-  console.log(req.body)
-
-  // Validate the request body
-  // const { error } = validateReport(req.body);
-  // if (error) return res.status(400).json({ error: error.details[0].message });
 
   try {
     // Ensure the report belongs to the petId
@@ -182,6 +167,7 @@ const addVac = async (req, res) => {
 
 
 //--------------------Delete exsisting Vac-----------------------
+
 const deleteVac = async (req, res) => {
   const { id, index } = req.params;
 
@@ -203,17 +189,12 @@ const deleteVac = async (req, res) => {
       { vaccinations: reportData.vaccinations }
     );
 
-    // Return success response
     res.status(200).json({ message: 'Vaccination Deleted' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
-
-
-
-
 
 
 module.exports = { addReport, reportUpdate, getReport, deleteReport, getallReport, addVac, deleteVac}

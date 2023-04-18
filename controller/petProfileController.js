@@ -3,7 +3,6 @@ const Joi = require('joi');
 const pet = require('../models/petModel');
 const booking = require('../models/bookingModel');
 const breed = require('../models/breedModel');
-const{validateRegReqBody}=require('../validations/vetValidation');
 const mongoose = require('mongoose');
 const moment = require('moment');
 const QRCode = require('qrcode');
@@ -11,7 +10,6 @@ const QRCode = require('qrcode');
 const registerPet = ((req, res) => {
   
     const date = moment(req.body.date).startOf('day').format('YYYY-MM-DD');
-    // Destructure the request body
 
    const { petName, pId, species, breed, gender, birth,  weight, color, petStatus,image,price } = req.body;
    
@@ -50,11 +48,12 @@ const registerPet = ((req, res) => {
       price,
       systime
     });
+
     // Generate QR code
     QRCode.toDataURL(`Pet Name: ${petName}\nPet ID: ${petId}\nSpecies: ${species}\nBreed: ${breed}\nGender: ${gender}\nStatus: ${petStatus} \n More Details Pls contact Animal Manager of the shelter.\n ---- Thank you 😊----`, function (err, url) {
       if (err) {
         console.error(err);
-        // Respond with an error message
+       
         return res.status(500).json({ error: 'Failed to generate QR code' });
       }
       // Get the base64-encoded QR code image data from the URL
@@ -63,13 +62,13 @@ const registerPet = ((req, res) => {
       newpet.qrCode = base64Image;
       newpet.save()
         .then(() => {
-          // Respond with success message and the new pet object
+          
           res.status(201).json({ message: 'Profile added', pet: newpet });
         })
         .catch((err) => {
-          // Log the error
+      
           console.log(err);
-          // Respond with an error message
+         
           res.status(500).json({ error: 'Failed to add profile' });
         });
     });
@@ -78,7 +77,8 @@ const registerPet = ((req, res) => {
 
 
 
-// update pet profile
+// ------update pet profile-----
+
 const profileUpdate = (async(req,res)=>{
 
   const {id} = req.params;
@@ -102,7 +102,7 @@ const profileUpdate = (async(req,res)=>{
       // Update the profile
       await pet.findOneAndUpdate({ petId: id }, updatedProfileData);
 
-      // Return success response
+   
       res.status(200).send({ status: 'Profile updated' });
   } catch (err) {
       console.log(`error:${err}`);
@@ -110,7 +110,7 @@ const profileUpdate = (async(req,res)=>{
   }
 });
 
-//get one pet profile
+//-------get one pet profile-------
 
 const getProfile = (async(req,res)=>{
 
@@ -126,6 +126,7 @@ const getProfile = (async(req,res)=>{
           error: 'Internal server error'
       });
   }
+
   // check if profile exists
   if (!profile) {
       return res.status(404).json({
@@ -135,7 +136,9 @@ const getProfile = (async(req,res)=>{
   res.status(200).json({profile})
 })
 
-//delete profile
+
+//------delete profile------
+
 const deleteProfile = (async (req, res) => {
 
   const { id } = req.params;
@@ -154,13 +157,15 @@ const deleteProfile = (async (req, res) => {
   }
 });
 
-//get all profiles
+
+//-----get all profiles----
 
 const getallprofile=(async (req,res) => {
   try {
       // get all the profile
+
       const profiles= await pet.find();
-      // return the profile
+
       res.status(200).json({ profiles });
   } catch (err) {
       console.log(err);
@@ -169,7 +174,7 @@ const getallprofile=(async (req,res) => {
 });
 
 
-//QR fetching
+//------QR fetching-------
 
 const Qr =(async (req, res) => {
 
@@ -194,57 +199,13 @@ const shelterpets=(async (req,res) => {
   try {
       // get all the profile
       const books= await booking.find();
-      // return the profile
+     
       res.status(200).json({ books });
   } catch (err) {
       console.log(err);
       res.status(500).json({ error: 'Internal server error' });
   }
 });
-
-
-
-
-
-
-//get one breed
-
-// const getOneBreed = (async(req,res)=>{
-
-//   const { breedId } = req.params;
-//   console.log(breedId)
-
-//   try {
-//       oneBreed = await breed.findOne({_id:breedId});
-//   } catch (err) {
-//       console.error(err);
-//       return res.status(500).json({
-//           error: 'Internal server error'
-//       });
-//   }
-//   // check if profile exists
-//   if (!oneBreed) {
-//       return res.status(404).json({
-//           error: 'Profile not found'
-//       });
-//   }
-//   res.status(200).json({oneBreed})
-// })
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
 
 
 module.exports = { registerPet,profileUpdate,getProfile,deleteProfile,getallprofile,Qr,shelterpets}
